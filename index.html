@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Os 10 Mandamentos da Igreja Católica</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0b1120 0%, #17153b 50%, #2e0854 100%);
+            --card-bg: rgba(15, 23, 42, 0.85);
+            --card-border: rgba(251, 191, 36, 0.35);
+            --gold: #facc15;
+            --gold-glow: rgba(250, 204, 21, 0.5);
+            --cyan: #38bdf8;
+        }
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background: #0b1120;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #ffffff;
+        }
+
+        .presentation-viewport {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: var(--bg-gradient);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: scale(0.97);
+            padding: 50px 70px 100px 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 2;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid var(--card-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            width: 100%;
+            max-width: 1400px;
+            max-height: 84vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1, h2, .mandamento-num {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            letter-spacing: 1px;
+        }
+
+        h1 { font-size: 3.2rem; }
+        h2 { font-size: 2.4rem; }
+
+        .slide-text {
+            font-size: 1.45rem;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .text-gold {
+            color: var(--gold);
+            text-shadow: 0 0 15px var(--gold-glow);
+        }
+
+        .text-cyan {
+            color: var(--cyan);
+        }
+
+        .passagem-biblica {
+            font-style: italic;
+            border-left: 5px solid var(--gold);
+            padding: 12px 20px;
+            margin: 20px 0;
+            background: rgba(250, 204, 21, 0.12);
+            border-radius: 0 12px 12px 0;
+            font-size: 1.35rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .slide-img {
+            max-height: 52vh;
+            width: 100%;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        video {
+            max-height: 65vh;
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+            border: 3px solid var(--gold);
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .top-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .bottom-controls {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+            background: rgba(0, 0, 0, 0.75);
+            padding: 10px 25px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .progress-bar-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255,255,255,0.15);
+            z-index: 10;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--gold);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-option-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.25);
+            color: white;
+            text-align: left;
+            padding: 16px 24px;
+            border-radius: 14px;
+            transition: all 0.2s;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .quiz-option-btn:hover {
+            background: rgba(255,255,255,0.25);
+            color: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .quiz-q-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+
+        @media (max-height: 800px) {
+            .glass-card { padding: 2rem; }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.9rem; }
+            .slide-text { font-size: 1.25rem; }
+            .passagem-biblica { font-size: 1.15rem; }
+            .slide-img { max-height: 42vh; }
+            .quiz-option-btn { font-size: 1.1rem; padding: 12px 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-viewport">
+        
+        <div class="top-bar">
+            <span class="top-title text-uppercase opacity-90">
+                🇻🇦 Os 10 Mandamentos da Igreja Católica
+            </span>
+            <button class="btn btn-outline-light btn-lg rounded-pill px-4 fw-bold" onclick="toggleFullscreen()">
+                ⛶ Tela Cheia
+            </button>
+        </div>
+
+        <div id="slides-container"></div>
+
+        <div class="bottom-controls">
+            <button class="btn btn-lg btn-dark rounded-circle px-3" onclick="prevSlide()" title="Anterior">◀</button>
+            <span id="slide-counter" class="fs-5 fw-bold px-3">1 / --</span>
+            <button class="btn btn-lg btn-dark rounded-circle px-3" onclick="nextSlide()" title="Próximo">▶</button>
+        </div>
+
+        <div class="progress-bar-container">
+            <div id="progress-fill" class="progress-bar-fill"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const slidesData = [
+            // CAPA
+            {
+                type: 'cover',
+                title: 'OS 10 MANDAMENTOS DA IGREJA CATÓLICA',
+                subtitle: 'A Lei de Deus para uma Vida Verdadeira',
+                img: 'capa-mandamentos.png',
+                desc: 'Estudo simples e profundo sobre os ensinamentos que guiam a vida de todo cristão católica.'
+            },
+            // VÍDEO
+            {
+                type: 'video',
+                title: 'A Lei de Deus na Nossa Vida',
+                subtitle: 'Assista à explicação sobre como os Mandamentos nos ajudam a viver melhor.',
+                videoSrc: 'video.mp4'
+            },
+
+            // --- 1º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '1º Mandamento',
+                title: 'Amar a Deus sobre todas as coisas',
+                passage: '"Amarás o Senhor, teu Deus, de todo o teu coração, de toda a tua alma e de todo o teu entendimento. Este é o maior e o primeiro mandamento." (São Mateus 22, 37-38)',
+                img: 'mandamento-1.png',
+                text: 'Colocar Deus em primeiro lugar significa que nada pode ser mais importante do que Ele: nem dinheiro, nem fama, nem o nosso próprio orgulho. Deus deve ser a nossa prioridade todos os dias.'
+            },
+            {
+                type: 'content',
+                num: '1º Mandamento',
+                title: 'Confiar Apenas em Deus',
+                passage: '"Ao Senhor, teu Deus, adorarás e só a Ele prestarás culto." (São Mateus 4, 10)',
+                img: 'mandamento-1.png',
+                text: 'Este mandamento ensina a não buscar respostas em coisas como horóscopos, feitiçarias, simpatias ou crenças falsas. O cristão deposita toda a sua vida e o seu futuro apenas nas mãos de Deus.'
+            },
+            {
+                type: 'content',
+                num: '1º Mandamento',
+                title: 'Não Fazer das Coisas o Nosso Deus',
+                passage: '"Não terás outros deuses diante de mim." (Êxodo 20, 3)',
+                img: 'mandamento-1.png',
+                text: 'Transformamos coisas em falsos deuses quando vivemos em função do dinheiro, dos likes da internet ou dos prazeres da vida. Também cometemos uma falta grave quando desrespeitamos as coisas sagradas ou a Eucaristia.'
+            },
+            {
+                type: 'content',
+                num: '1º Mandamento',
+                title: 'Adorar a Deus de Coração',
+                passage: '"O Senhor é grande e digno de todo louvor, seu tamanho é insondável." (Salmo 144, 3)',
+                img: 'mandamento-1.png',
+                text: 'Adorar a Deus é reconhecer que fomos criados por Ele. Fazemos isso rezando diariamente, participando da igreja e fazendo o bem aos outros por amor a Deus.'
+            },
+
+            // --- 2º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '2º Mandamento',
+                title: 'Não tomar seu santo nome em vão',
+                passage: '"Não tomarás o nome do Senhor, teu Deus, em vão, porque o Senhor não deixará impune aquele que tomar o seu nome em vão." (Êxodo 20, 7)',
+                img: 'mandamento-2.png',
+                text: 'O nome de Deus é Santo. Devemos pronunciá-lo apenas para rezar, agradecer e abençoar. Não devemos usar o nome de Deus sem respeito ou em piadas.'
+            },
+            {
+                type: 'content',
+                num: '2º Mandamento',
+                title: 'Respeito ao Nome Sagrado',
+                passage: '"Bendito seja o nome do Senhor, desde agora e para sempre." (Salmo 112, 2)',
+                img: 'mandamento-2.png',
+                text: 'Este mandamento condena falar mal de Deus, da Virgem Maria ou dos Santos. Também proíbe usar o nome de Deus para fazer promessas mentirosas ou enganar os outros.'
+            },
+            {
+                type: 'content',
+                num: '2º Mandamento',
+                title: 'O Nosso Nome no Batismo',
+                passage: '"Ide e fazei discípulos de todas as nações, batizando-os em nome do Pai, e do Filho, e do Espírito Santo." (São Mateus 28, 19)',
+                img: 'mandamento-2.png',
+                text: 'No Sacramento do Batismo, recebemos o nosso nome diante de Deus. Respeitar este mandamento significa viver de forma coerente com o nome de cristão que levamos.'
+            },
+            {
+                type: 'content',
+                num: '2º Mandamento',
+                title: 'Falar Sempre a Verdade',
+                passage: '"Seja o vosso falar: Sim, sim; Não, não. O que passa disso vem do Maligno." (São Mateus 5, 37)',
+                img: 'mandamento-2.png',
+                text: 'Jesus nos ensina a ser tão honestos nas palavras que não precisamos ficar jurando por tudo. O cristão de verdade deve ser conhecido por honrar a sua palavra.'
+            },
+
+            // --- QUIZ 1 ---
+            {
+                type: 'quiz',
+                title: 'Quiz de Fixação: 1º e 2º Mandamentos',
+                questions: [
+                    {
+                        q: 'Por que buscar respostas em horóscopos ou simpatias vai contra o 1º Mandamento?',
+                        opts: [
+                            'Porque gastamos dinheiro desnecessário.',
+                            'Porque tira a nossa confiança em Deus e coloca a nossa fé em coisas criadas.',
+                            'Porque a Igreja não gosta de coisas antigas.',
+                            'Não vai contra, é apenas um passatempo sem impacto moral.'
+                        ],
+                        ans: 1
+                    },
+                    {
+                        q: 'O que significa "tomar o nome de Deus em vão" de acordo com o 2º Mandamento?',
+                        opts: [
+                            'Usar o nome de Deus para promessas mentirosas, piadas ou ofensas.',
+                            'Cantar louvores durante a celebração da Missa.',
+                            'Rezar antes das refeições em público.',
+                            'Falar o nome de Deus quando estamos rezando com atenção.'
+                        ],
+                        ans: 0
+                    },
+                    {
+                        q: 'O que é colocar algo no lugar de Deus (falso deus) nos dias de hoje?',
+                        opts: [
+                            'Dedicar tempo aos estudos e à família.',
+                            'Viver unicamente em função do dinheiro, da vaidade ou do orgulho pessoal.',
+                            'Praticar desportos nos finais de semana.',
+                            'Trabalhar para ter um futuro melhor.'
+                        ],
+                        ans: 1
+                    }
+                ]
+            },
+
+            // --- 3º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '3º Mandamento',
+                title: 'Guardar domingos e festas de guarda',
+                passage: '"Lembra-te do dia de sábado, para o santificar. Trabalharás seis dias, mas o sétimo dia é o sábado do Senhor, teu Deus." (Êxodo 20, 8-9)',
+                img: 'mandamento-3.png',
+                text: 'Os cristãos guardam o Domingo porque foi o dia em que Jesus Cristo ressuscitou. É o dia reservado para nos reunirmos em comunidade e darmos graças a Deus.'
+            },
+            {
+                type: 'content',
+                num: '3º Mandamento',
+                title: 'Participar da Santa Missa',
+                passage: '"Isto é o meu Corpo, que é dado por vós; fazei isto em memória de mim." (São Lucas 22, 19)',
+                img: 'mandamento-3.png',
+                text: 'Ir à Missa aos domingos e festas importantes (como o Natal e a Imaculada Conceição) é um compromisso de amor com Deus para recebermos a Palavra e a Eucaristia.'
+            },
+            {
+                type: 'content',
+                num: '3º Mandamento',
+                title: 'Descanso e Tempo para a Família',
+                passage: '"O sábado foi feito por causa do homem, e não o homem por causa do sábado." (São Marcos 2, 27)',
+                img: 'mandamento-3.png',
+                text: 'O domingo é dia de descansar o corpo e a mente. É tempo de ficar com a família, conversar com os amigos, ajudar quem precisa e renovar as forças espirituais.'
+            },
+            {
+                type: 'content',
+                num: '3º Mandamento',
+                title: 'Não Viver Só para o Trabalho',
+                passage: '"Buscai primeiro o Reino de Deus e a sua justiça, e todas estas coisas vos serão dadas por acréscimo." (São Mateus 6, 33)',
+                img: 'mandamento-3.png',
+                text: 'Santificar o domingo nos impede de virarmos escravos do trabalho e da correria diária. Lembra-nos de que a nossa vida nesta terra tem um sentido muito maior.'
+            },
+
+            // --- 4º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '4º Mandamento',
+                title: 'Honrar pai e mãe',
+                passage: '"Honra teu pai e tua mãe, para que teus dias se prolonguem na terra que o Senhor, teu Deus, te dá." (Êxodo 20, 12)',
+                img: 'mandamento-4.png',
+                text: 'Este mandamento ensina os filhos a amarem, respeitarem e serem gratos aos seus pais. Exige escutar os seus conselhos e ajudá-los em suas necessidades.'
+            },
+            {
+                type: 'content',
+                num: '4º Mandamento',
+                title: 'O Papel da Família',
+                passage: '"Vós, pais, não provoqueis a ira dos vossos filhos, mas criai-os na disciplina e na instrução do Senhor." (Efésios 6, 4)',
+                img: 'mandamento-4.png',
+                text: 'Os pais têm a missão dada por Deus de ensinar os primeiros passos na fé, transmitir bons valores e criar um ambiente de respeito e amor dentro de casa.'
+            },
+            {
+                type: 'content',
+                num: '4º Mandamento',
+                title: 'Cuidar dos Pais na Velhice',
+                passage: '"Meu filho, ampara a velhice de teu pai e não o desgostes durante a sua vida." (Eclesiástico 3, 14)',
+                img: 'mandamento-4.png',
+                text: 'Honrar pai e mãe não termina quando crescemos. Inclui ter paciência, dar carinho e cuidar dos pais e avós quando eles ficam idosos, doentes ou sozinhos.'
+            },
+            {
+                type: 'content',
+                num: '4º Mandamento',
+                title: 'Respeito na Vida em Sociedade',
+                passage: '"Dai, pois, a César o que é de César, e a Deus o que é de Deus." (São Mateus 22, 21)',
+                img: 'mandamento-4.png',
+                text: 'O mandamento também se aplica a respeitar os professores, os idosos e as autoridades que trabalham honestamente pelo bem de todos na sociedade.'
+            },
+
+            // --- QUIZ 2 ---
+            {
+                type: 'quiz',
+                title: 'Quiz de Fixação: 3º e 4º Mandamentos',
+                questions: [
+                    {
+                        q: 'Por que o Domingo foi escolhido pelos cristãos como o dia principal de culto a Deus?',
+                        opts: [
+                            'Porque é o dia em que Jesus Cristo ressuscitou dos mortos.',
+                            'Porque era o dia de folga no calendário antigo.',
+                            'Apenas por uma decisão sem motivo religioso.',
+                            'Porque não havia outros dias disponíveis.'
+                        ],
+                        ans: 0
+                    },
+                    {
+                        q: 'O que o 4º Mandamento exige dos filhos quando os pais ficam velhos ou doentes?',
+                        opts: [
+                            'Deixar a responsabilidade inteiramente para terceiros.',
+                            'Dar apoio, carinho, paciência e amparo material e espiritual.',
+                            'Ignorar as suas necessidades por falta de tempo.',
+                            'Visitar apenas em datas comemorativas.'
+                        ],
+                        ans: 1
+                    },
+                    {
+                        q: 'Além dos pais, a quem mais o 4º Mandamento nos ensina a respeitar?',
+                        opts: [
+                            'Apenas às pessoas com quem concordamos.',
+                            'Aos professores, idosos e autoridades que promovem o bem comum.',
+                            'Exclusivamente aos líderes comunitários.',
+                            'A ninguém mais, aplica-se só dentro de casa.'
+                        ],
+                        ans: 1
+                    }
+                ]
+            },
+
+            // --- 5º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '5º Mandamento',
+                title: 'Não matar',
+                passage: '"Não matarás." (Êxodo 20, 13) / "Antes que no seio materno tu fosses formado, eu já te conhecia." (Jeremias 1, 5)',
+                img: 'mandamento-5.png',
+                text: 'A vida humana é um dom sagrado que pertence a Deus. Ninguém tem o direito de tirar a vida de outra pessoa, desde a concepção até o momento da morte natural.'
+            },
+            {
+                type: 'content',
+                num: '5º Mandamento',
+                title: 'Defesa da Vida e da Saúde',
+                passage: '"Não sabeis que o vosso corpo é templo do Espírito Santo, que habita em vós?" (1 Coríntios 6, 19)',
+                img: 'mandamento-5.png',
+                text: 'Este mandamento ensina a cuidar do nosso corpo e da nossa mente. Proíbe fazer mal a si mesmo, usar drogas ou expor a vida a perigos desnecessários.'
+            },
+            {
+                type: 'content',
+                num: '5º Mandamento',
+                title: 'Evitar o Ódio e a Vingança',
+                passage: '"Eu, porém, vos digo: Todo aquele que se irar contra seu irmão estará sujeito a julgamento." (São Mateus 5, 22)',
+                img: 'mandamento-5.png',
+                text: 'Jesus ensina que matar não é só tirar a vida física. Guardar raiva, desejar o mal, insultar os outros ou buscar vingança também ferem o amor que Deus pede.'
+            },
+            {
+                type: 'content',
+                num: '5º Mandamento',
+                title: 'Ser Promotor da Paz',
+                passage: '"Bem-aventurados os pacificadores, porque serão chamados filhos de Deus." (São Mateus 5, 9)',
+                img: 'mandamento-5.png',
+                text: 'Cumprir o 5º Mandamento significa perdoar quem nos ofendeu, buscar a reconciliação e proteger os mais fracos e indefesos da nossa comunidade.'
+            },
+
+            // --- 6º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '6º Mandamento',
+                title: 'Não pecar contra a castidade',
+                passage: '"Bem-aventurados os puros de coração, porque verão a Deus." (São Mateus 5, 8)',
+                img: 'mandamento-6.png',
+                text: 'O sexto mandamento convida a viver com autodomínio e respeito próprio. Ensina a valorizar a pureza do coração e a direcionar o afeto para um amor verdadeiro.'
+            },
+            {
+                type: 'content',
+                num: '6º Mandamento',
+                title: 'Respeito à Dignidade das Pessoas',
+                passage: '"Revestir-vos do homem novo, criado segundo Deus na justiça e na santidade da verdade." (Efésios 4, 24)',
+                img: 'mandamento-6.png',
+                text: 'Este mandamento ensina a jamais usar ou tratar outra pessoa como um objeto. O cristão aprende a olhar para os outros com respeito, carinho sincero e consideração.'
+            },
+            {
+                type: 'content',
+                num: '6º Mandamento',
+                title: 'O Amor Verdadeiro e Fiel',
+                passage: '"O amor é paciente, o amor é prestativo; não é invejoso, não se ensoberbece, não busca os seus próprios interesses." (1 Coríntios 13, 4-5)',
+                img: 'mandamento-6.png',
+                text: 'A pureza fortalece a nossa capacidade de amar de forma generosa e madura. Prepara o coração para construir relacionamentos saudáveis, sinceros e abençoados por Deus.'
+            },
+            {
+                type: 'content',
+                num: '6º Mandamento',
+                title: 'Anotações para Guardar o Coração',
+                passage: '"Vigiai e orai, para que não entreis em tentação; o espírito, na verdade, está pronto, mas a carne é fraca." (São Mateus 26, 41)',
+                img: 'mandamento-6.png',
+                text: 'Para manter um coração puro e em paz, a Igreja recomenda a oração diária, bons pensamentos, boas leituras e a escolha de amizades que nos ajudem a crescer no bem.'
+            },
+
+            // --- QUIZ 3 ---
+            {
+                type: 'quiz',
+                title: 'Quiz de Fixação: 5º e 6º Mandamentos',
+                questions: [
+                    {
+                        q: 'Por que o 5º Mandamento ensina que a vida humana deve ser protegida desde o início?',
+                        opts: [
+                            'Porque a vida humana é um dom sagrado criado por Deus com valor inestimável.',
+                            'Porque é apenas uma norma para evitar conflitos na rua.',
+                            'Apenas por recomendação dos médicos.',
+                            'Não há exigência de proteger a vida em todas as etapas.'
+                        ],
+                        ans: 0
+                    },
+                    {
+                        q: 'Além das atitudes externas, o que Jesus condena ao explicar o 5º Mandamento?',
+                        opts: [
+                            'Apenas os crimes graves em julgamentos públicos.',
+                            'O ódio, o rancor guardado, a vingança e as agressões por palavras.',
+                            'A prática de esportes intensos.',
+                            'Sentir cansaço ou tristeza.'
+                        ],
+                        ans: 1
+                    },
+                    {
+                        q: 'De acordo com o 6º Mandamento, qual é a atitude correta em relação ao próximo?',
+                        opts: [
+                            'Tratar as pessoas com utilidade pessoal.',
+                            'Respeitar a dignidade de cada pessoa sem usá-la como um simples objeto.',
+                            'Evitar ter amizades na comunidade.',
+                            'Não se importar com os sentimentos alheios.'
+                        ],
+                        ans: 1
+                    }
+                ]
+            },
+
+            // --- 7º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '7º Mandamento',
+                title: 'Não furtar',
+                passage: '"Não furtarás." (Êxodo 20, 15) / "O fruto da justiça é semeado na paz para aqueles que cultivam a paz." (São Tiago 3, 18)',
+                img: 'mandamento-7.png',
+                text: 'Este mandamento exige honestidade total. Proíbe pegar o que não nos pertence, estragar coisas dos outros ou tirar proveito injusto do trabalho de alguém.'
+            },
+            {
+                type: 'content',
+                num: '7º Mandamento',
+                title: 'Atitudes Injustas que Devemos Evitar',
+                passage: '"Eis que o salário dos trabalhadores por vós fraudado clama a Deus." (São Tiago 5, 4)',
+                img: 'mandamento-7.png',
+                text: 'São faltas contra este mandamento: colar nas provas, fazer plágio, não pagar o valor justo, enganar nos trocos e estragar o patrimônio público da cidade.'
+            },
+
+            {
+                type: 'content',
+                num: '7º Mandamento',
+                title: 'A Obrigação de Devolver o que foi Pego',
+                passage: '"Se eu defraudei alguém em qualquer coisa, devolverei quatro vezes mais." (São Lucas 19, 8)',
+                img: 'mandamento-7.png',
+                text: 'A Igreja ensina que quem roubou ou causou prejuízo a outra pessoa precisa pedir perdão e, obrigatoriamente, devolver o objeto ou reparar o dano causado.'
+            },
+            {
+                type: 'content',
+                num: '7º Mandamento',
+                title: 'Ajudar os Mais Necessitados',
+                passage: '"A multidão dos fiéis tinha um só coração e uma só alma." (Atos 4, 32)',
+                img: 'mandamento-7.png',
+                text: 'O 7º Mandamento ensina que os bens materiais devem ser compartilhados. Ter honestidade também significa ser generoso e ajudar as pessoas que passam fome e privações.'
+            },
+
+            // --- 8º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '8º Mandamento',
+                title: 'Não levantar falso testemunho',
+                passage: '"Não darás falso testemunho contra o teu próximo." (Êxodo 20, 16) / "Conhecereis a verdade, e a verdade vos libertará." (São João 8, 32)',
+                img: 'mandamento-8.png',
+                text: 'Exige ser verdadeiro e honesto em todas as situações. O cristão não deve mentir, fingir o que não é ou enganar os amigos e familiares.'
+            },
+            {
+                type: 'content',
+                num: '8º Mandamento',
+                title: 'Evitar a Mentira e a Fofoca',
+                passage: '"Com a língua bendizemos o Senhor e amaldiçoamos os homens." (São Tiago 3, 9)',
+                img: 'mandamento-8.png',
+                text: 'Inventar mentiras sobre os outros (calúnia) ou espalhar fofocas sobre os defeitos alheios destrói a reputação e a amizade entre as pessoas. A língua deve servir para edificar.'
+            },
+            {
+                type: 'content',
+                num: '8º Mandamento',
+                title: 'Cuidados com a Internet e Redes Sociais',
+                passage: '"Despojando-vos da mentira, falai a verdade cada um ao seu próximo." (Efésios 4, 25)',
+                img: 'mandamento-8.png',
+                text: 'Compartilhar notícias falsas (fake news) ou participar de difamações na internet vai diretamente contra o 8º Mandamento. Devemos sempre checar a verdade.'
+            },
+            {
+                type: 'content',
+                num: '8º Mandamento',
+                title: 'Defender a Verdade sem Medo',
+                passage: '"Aquele que me confessar diante dos homens, também eu o confessarei diante de meu Pai." (São Mateus 10, 32)',
+                img: 'mandamento-8.png',
+                text: 'O cristão deve ter coragem para assumir os seus erros e defender a verdade com humildade, sendo coerente com aquilo em que acredita.'
+            },
+
+            // --- QUIZ 4 ---
+            {
+                type: 'quiz',
+                title: 'Quiz de Fixação: 7º e 8º Mandamentos',
+                questions: [
+                    {
+                        q: 'Se alguém pega algo que pertence a outra pessoa, o que é preciso fazer além de pedir perdão?',
+                        opts: [
+                            'Devolver o objeto ou reparar o valor do prejuízo causado.',
+                            'Mudar de assunto e fingir que nada aconteceu.',
+                            'Apenas prometendo não voltar a fazê-lo.',
+                            'Doar um objeto diferente para outra pessoa.'
+                        ],
+                        ans: 0
+                    },
+                    {
+                        q: 'Por que inventar mentiras ou espalhar fofocas vai contra o 8º Mandamento?',
+                        opts: [
+                            'Porque é apenas uma brincadeira sem gravidade.',
+                            'Porque destrói a honra, a reputação e a confiança entre as pessoas.',
+                            'Porque toma muito do nosso tempo livre.',
+                            'Aplica-se somente quando estamos sob juramento judicial.'
+                        ],
+                        ans: 1
+                    },
+                    {
+                        q: 'Qual é a atitude correta diante de notícias na internet antes de as compartilhar?',
+                        opts: [
+                            'Compartilhar logo com todos para dar a notícia primeiro.',
+                            'Verificar se a informação é verdadeira para não espalhar mentiras.',
+                            'Adicionar opiniões pessoais exageradas.',
+                            'Ignorar se for sobre amigos.'
+                        ],
+                        ans: 1
+                    }
+                ]
+            },
+
+            // --- 9º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '9º Mandamento',
+                title: 'Não desejar a mulher do próximo',
+                passage: '"Todo aquele que olhar para uma mulher com cobiça, já em seu coração cometeu adultério com ela." (São Mateus 5, 28)',
+                img: 'mandamento-9.png',
+                text: 'Este mandamento orienta os nossos pensamentos e desejos interiores. Ensina a ter intenções puras e a respeitar os compromissos das famílias.'
+            },
+            {
+                type: 'content',
+                num: '9º Mandamento',
+                title: 'A Importância do Respeito e Modéstia',
+                passage: '"O homem vê as aparências, mas o Senhor olha o coração." (1 Samuel 16, 7)',
+                img: 'mandamento-9.png',
+                text: 'Ensina a nos vestirmos e comportarmos com modéstia, promovendo um ambiente de respeito e protegendo a intimidade e o valor de cada pessoa.'
+            },
+            {
+                type: 'content',
+                num: '9º Mandamento',
+                title: 'Limpar os Nossos Pensamentos',
+                passage: '"Se os teus olhos forem limpos, todo o teu corpo será luminoso." (São Lucas 11, 34)',
+                img: 'mandamento-9.png',
+                text: 'Devemos ter cuidado com os filmes, imagens e conversas que consumimos. Afastar o que é ruim ajuda a manter a nossa mente limpa e cheia de paz.'
+            },
+
+            // --- 10º MANDAMENTO ---
+            {
+                type: 'content',
+                num: '10º Mandamento',
+                title: 'Não cobiçar as coisas alheias',
+                passage: '"Porque onde estiver o teu tesouro, aí estará também o teu coração." (São Mateus 6, 21)',
+                img: 'mandamento-10.png',
+                text: 'O 10º Mandamento combate a ganância e a inveja. Ensina a não ficar incomodado ou triste quando o colega tem algo melhor do que nós.'
+            },
+            {
+                type: 'content',
+                num: '10º Mandamento',
+                title: 'Vencer a Inveja com a Gratidão',
+                passage: '"O coração tranquilo é a vida do corpo, mas a inveja é a podridão dos ossos." (Provérbios 14, 30)',
+                img: 'mandamento-10.png',
+                text: 'A inveja é um sentimento ruim que nos faz querer que o outro perca o que tem. Vencemos a inveja agradecendo a Deus por tudo o que nós já temos.'
+            },
+            {
+                type: 'content',
+                num: '10º Mandamento',
+                title: 'Ser Contente com o que se Tem',
+                passage: '"Bem-aventurados os pobres em espírito, porque deles é o Reino dos Céus." (São Mateus 5, 3)',
+                img: 'mandamento-10.png',
+                text: 'Ser "pobre de coração" significa não ser agarrado ao dinheiro e às coisas materiais. As coisas mais importantes da vida não se compram com dinheiro.'
+            },
+
+            // --- QUIZ 5 ---
+            {
+                type: 'quiz',
+                title: 'Quiz de Fixação: 9º e 10º Mandamentos',
+                questions: [
+                    {
+                        q: 'O que o 9º e o 10º Mandamentos nos ensinam a cuidar em primeiro lugar?',
+                        opts: [
+                            'Das nossas roupas e aparência externa.',
+                            'Dos nossos pensamentos, intenções interiores e desejos do coração.',
+                            'Das nossas compras no comércio.',
+                            'Das leis civis da cidade.'
+                        ],
+                        ans: 1
+                    },
+                    {
+                        q: 'O que é o sentimento da Inveja que o 10º Mandamento manda combater?',
+                        opts: [
+                            'Ficar triste ao ver o bem do outro e querer que ele perca o que conquistou.',
+                            'Apreciar o esforço de um colega de classe.',
+                            'Trabalhar para comprar o seu próprio material.',
+                            'Agradecer a Deus pelas suas próprias conquistas.'
+                        ],
+                        ans: 0
+                    },
+                    {
+                        q: 'Qual é o melhor remedio contra a cobiça e a inveja?',
+                        opts: [
+                            'Trabalhar sem parar para ter mais coisas do que os vizinhos.',
+                            'Desenvolver a gratidão por tudo o que Deus nos deu e focar nas coisas que duram para sempre.',
+                            'Esconder os nossos bens para que ninguém veja.',
+                            'Não comprar mais nada na vida.'
+                        ],
+                        ans: 1
+                    }
+                ]
+            },
+
+            // --- QUIZ FINAL ---
+            {
+                type: 'quiz-final',
+                title: '🏆 AVALIAÇÃO FINAL: Os 10 Mandamentos',
+                questions: [
+                    {
+                        q: '1. O que o 1º Mandamento nos pede em relação a Deus?',
+                        opts: [
+                            'Que Ele seja a prioridade absoluta da nossa vida, acima de qualquer coisa ou interesse material.',
+                            'Que Lhe dediquemos tempo apenas uma vez por ano.',
+                            'Que busquemos ajuda em feitiçarias e horóscopos.',
+                            'Que troquemos a oração por acúmulo de riquezas.'
+                        ],
+                        ans: 0
+                    },
+                    {
+                        q: '2. Por que o Domingo deve ser mantido como o Dia do Senhor (3º Mandamento)?',
+                        opts: [
+                            'Para rezar em comunidade na Missa, agradecer a Deus e descansar em família.',
+                            'Apenas para dormir até mais tarde sem pensar em nada.',
+                            'Porque é o dia mais frio da semana.',
+                            'Não há obrigatoriedade em santificar o domingo.'
+                        ],
+                        ans: 0
+                    },
+                    {
+                        q: '3. A vida humana deve ser respeitada e protegida segundo o 5º Mandamento em qual momento?',
+                        opts: [
+                            'Em todas as etapas da vida, desde o início até a morte natural.',
+                            'Apenas enquanto a pessoa for jovem e saudável.',
+                            'Apenas após completar a maioridade.',
+                            'Somente se a pessoa for famosa ou rica.'
+                        ],
+                        ans: 0
+                    },
+                    {
+                        q: '4. Se alguém cometeu um furto ou causou dano ao próximo (7º Mandamento), o que deve fazer?',
+                        opts: [
+                            'Restituir o bem pego e reparar o prejuízo causado.',
+                            'Apenas pedir desculpas e guardar o objeto.',
+                            'Procurar outro lugar para morar.',
+                            'Esperar que a pessoa se esqueça do ocorrido.'
+                        ],
+                        ans: 0
+                    },
+                    {
+                        q: '5. Como devemos nos comportar em relação às notícias e conversas sobre os outros (8º Mandamento)?',
+                        opts: [
+                            'Acreditar em tudo e repassar nas redes sociais sem checar.',
+                            'Falar sempre a verdade, evitar fofocas e nunca divulgar notícias falsas.',
+                            'Criar histórias divertidas sobre os vizinhos.',
+                            'Mentir sempre que for conveniente para nós.'
+                        ],
+                        ans: 1
+                    },
+                    {
+                        q: '6. Qual é a regra de ouro dada por Jesus que resume todos os 10 Mandamentos?',
+                        opts: [
+                            'Amar a Deus sobre todas as coisas e ao próximo como a si mesmo.',
+                            'Pensar em si próprio antes de ajudar qualquer pessoa.',
+                            'Seguir as regras apenas quando houver fiscalização.',
+                            'Buscar ter mais bens materiais do que os outros.'
+                        ],
+                        ans: 0
+                    }
+                ]
+            }
+        ];
+
+        let currentSlideIndex = 0;
+        const slidesContainer = document.getElementById('slides-container');
+        const slideCounter = document.getElementById('slide-counter');
+        const progressFill = document.getElementById('progress-fill');
+
+        function renderSlides() {
+            slidesContainer.innerHTML = '';
+            
+            slidesData.forEach((data, index) => {
+                const slideDiv = document.createElement('div');
+                slideDiv.className = `slide ${index === 0 ? 'active' : ''}`;
+                slideDiv.id = `slide-${index}`;
+
+                if (data.type === 'cover') {
+                    slideDiv.innerHTML = `
+                        <div class="glass-card text-center align-items-center">
+                            <span class="badge bg-warning text-dark fs-5 px-4 py-2 rounded-pill mb-4 fw-bold">CATECISMO DA IGREJA CATÓLICA</span>
+                            <h1 class="display-3 text-gold mb-3">${data.title}</h1>
+                            <p class="fs-2 text-cyan mb-4 fw-bold">${data.subtitle}</p>
+                            <img src="${data.img}" alt="Capa" class="slide-img mb-4" onerror="this.style.display='none'">
+                            <p class="slide-text max-w-800 mx-auto opacity-90">${data.desc}</p>
+                        </div>
+                    `;
+                } else if (data.type === 'video') {
+                    slideDiv.innerHTML = `
+                        <div class="glass-card text-center align-items-center">
+                            <h2 class="text-gold mb-3">${data.title}</h2>
+                            <p class="fs-4 text-cyan mb-4">${data.subtitle}</p>
+                            <video controls poster="capa-mandamentos.png">
+                                <source src="${data.videoSrc}" type="video/mp4">
+                                Seu navegador não suporta a exibição deste vídeo em MP4.
+                            </video>
+                        </div>
+                    `;
+                } else if (data.type === 'content') {
+                    slideDiv.innerHTML = `
+                        <div class="glass-card">
+                            <div class="row align-items-center h-100">
+                                <div class="col-md-7 pe-md-5">
+                                    <span class="badge bg-primary mb-3 fs-5 fw-bold px-3 py-2">${data.num}</span>
+                                    <h2 class="text-gold mb-3">${data.title}</h2>
+                                    <div class="passagem-biblica">${data.passage}</div>
+                                    <p class="slide-text mt-4">${data.text}</p>
+                                </div>
+                                <div class="col-md-5 text-center mt-4 mt-md-0">
+                                    <img src="${data.img}" alt="${data.title}" class="slide-img" onerror="this.src='https://via.placeholder.com/700x500/17153b/ffffff?text=${encodeURIComponent(data.num)}'">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (data.type === 'quiz' || data.type === 'quiz-final') {
+                    slideDiv.innerHTML = generateQuizHTML(data, index);
+                }
+
+                slidesContainer.appendChild(slideDiv);
+            });
+
+            updateUI();
+        }
+
+        function generateQuizHTML(quizData, slideIdx) {
+            return `
+                <div class="glass-card" id="quiz-card-${slideIdx}">
+                    <div class="text-center mb-4">
+                        <span class="badge bg-warning text-dark fs-5 px-4 py-2 mb-2 fw-bold">ENCONTRO CATÓLICO</span>
+                        <h2 class="text-gold">${quizData.title}</h2>
+                    </div>
+                    <div id="quiz-body-${slideIdx}">
+                        <div class="quiz-question-box">
+                            <p class="quiz-q-title text-cyan mb-4" id="q-text-${slideIdx}">Carregando pergunta...</p>
+                            <div class="d-flex flex-column gap-3" id="q-options-${slideIdx}"></div>
+                        </div>
+                        <div id="q-feedback-${slideIdx}" class="mt-4 text-center fw-bold fs-3"></div>
+                        <div class="text-end mt-3">
+                            <button class="btn btn-warning btn-lg px-5 fw-bold text-dark fs-4" id="q-next-btn-${slideIdx}" style="display:none;" onclick="nextQuizQuestion(${slideIdx})">Próxima Pergunta ▶</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        let quizStates = {};
+
+        function initQuiz(slideIdx) {
+            const data = slidesData[slideIdx];
+            quizStates[slideIdx] = {
+                currentQ: 0,
+                score: 0,
+                answered: false
+            };
+            renderQuizQuestion(slideIdx);
+        }
+
+        function renderQuizQuestion(slideIdx) {
+            const state = quizStates[slideIdx];
+            const data = slidesData[slideIdx];
+            const q = data.questions[state.currentQ];
+
+            document.getElementById(`q-text-${slideIdx}`).innerText = q.q;
+            const optionsContainer = document.getElementById(`q-options-${slideIdx}`);
+            optionsContainer.innerHTML = '';
+            document.getElementById(`q-feedback-${slideIdx}`).innerText = '';
+            document.getElementById(`q-next-btn-${slideIdx}`).style.display = 'none';
+            state.answered = false;
+
+            q.opts.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'quiz-option-btn';
+                btn.innerText = `${String.fromCharCode(65 + idx)}) ${opt}`;
+                btn.onclick = () => checkQuizAnswer(slideIdx, idx, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(slideIdx, selectedIdx, btn) {
+            const state = quizStates[slideIdx];
+            if (state.answered) return;
+            state.answered = true;
+
+            const q = slidesData[slideIdx].questions[state.currentQ];
+            const allBtns = document.querySelectorAll(`#q-options-${slideIdx} button`);
+
+            if (selectedIdx === q.ans) {
+                btn.style.background = 'rgba(46, 204, 113, 0.45)';
+                btn.style.borderColor = '#2ecc71';
+                document.getElementById(`q-feedback-${slideIdx}`).innerText = '✅ Resposta Correta!';
+                document.getElementById(`q-feedback-${slideIdx}`).style.color = '#2ecc71';
+                state.score++;
+            } else {
+                btn.style.background = 'rgba(231, 76, 60, 0.45)';
+                btn.style.borderColor = '#e74c3c';
+                allBtns[q.ans].style.background = 'rgba(46, 204, 113, 0.45)';
+                allBtns[q.ans].style.borderColor = '#2ecc71';
+                document.getElementById(`q-feedback-${slideIdx}`).innerText = '❌ Resposta Incorreta.';
+                document.getElementById(`q-feedback-${slideIdx}`).style.color = '#e74c3c';
+            }
+
+            document.getElementById(`q-next-btn-${slideIdx}`).style.display = 'inline-block';
+        }
+
+        function nextQuizQuestion(slideIdx) {
+            const state = quizStates[slideIdx];
+            const data = slidesData[slideIdx];
+            
+            state.currentQ++;
+            if (state.currentQ < data.questions.length) {
+                renderQuizQuestion(slideIdx);
+            } else {
+                const card = document.getElementById(`quiz-body-${slideIdx}`);
+                card.innerHTML = `
+                    <div class="text-center py-4">
+                        <h2 class="text-gold mb-3 display-4">Quiz Concluído! 🎉</h2>
+                        <p class="fs-2 mb-4">Você acertou <strong class="text-cyan fs-1">${state.score}</strong> de <strong>${data.questions.length}</strong> perguntas.</p>
+                        <p class="fs-4 lead">${state.score === data.questions.length ? 'Excelente! Conhecimento muito bom da fé e dos Mandamentos!' : 'Muito bem! Continue participando e aprendendo mais a cada dia.'}</p>
+                        <button class="btn btn-outline-light btn-lg mt-4 px-5 fs-4" onclick="initQuiz(${slideIdx})">Reiniciar Quiz 🔄</button>
+                    </div>
+                `;
+            }
+        }
+
+        function showSlide(index) {
+            if (index < 0 || index >= slidesData.length) return;
+
+            const currentSlideEl = document.getElementById(`slide-${currentSlideIndex}`);
+            const nextSlideEl = document.getElementById(`slide-${index}`);
+
+            const activeVideo = currentSlideEl.querySelector('video');
+            if (activeVideo) activeVideo.pause();
+
+            currentSlideEl.classList.remove('active');
+            nextSlideEl.classList.add('active');
+
+            currentSlideIndex = index;
+            updateUI();
+
+            if ((slidesData[index].type === 'quiz' || slidesData[index].type === 'quiz-final') && !quizStates[index]) {
+                initQuiz(index);
+            }
+        }
+
+        function nextSlide() {
+            if (currentSlideIndex < slidesData.length - 1) {
+                showSlide(currentSlideIndex + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIndex > 0) {
+                showSlide(currentSlideIndex - 1);
+            }
+        }
+
+        function updateUI() {
+            slideCounter.innerText = `${currentSlideIndex + 1} / ${slidesData.length}`;
+            const pct = ((currentSlideIndex + 1) / slidesData.length) * 100;
+            progressFill.style.width = `${pct}%`;
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        window.onload = () => {
+            renderSlides();
+        };
+    </script>
+</body>
+</html>
