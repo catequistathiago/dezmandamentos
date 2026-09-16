@@ -8,15 +8,31 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0b1120 0%, #17153b 50%, #2e0854 100%);
-            --card-bg: rgba(15, 23, 42, 0.85);
-            --card-border: rgba(251, 191, 36, 0.35);
-            --gold: #facc15;
-            --gold-glow: rgba(250, 204, 21, 0.5);
-            --cyan: #38bdf8;
+            /* Paleta refinada: azul-meia-noite -> púrpura real -> vinho profundo */
+            --bg-deep: #070912;
+            --bg-mid: #1a1240;
+            --bg-warm: #3a0d5e;
+            --bg-gradient: radial-gradient(circle at 15% 10%, rgba(122, 60, 180, 0.35), transparent 45%),
+                            radial-gradient(circle at 85% 90%, rgba(58, 13, 94, 0.5), transparent 55%),
+                            linear-gradient(135deg, var(--bg-deep) 0%, var(--bg-mid) 55%, var(--bg-warm) 100%);
+
+            --card-bg: linear-gradient(160deg, rgba(20, 16, 48, 0.92) 0%, rgba(12, 10, 30, 0.94) 100%);
+            --card-border: rgba(244, 196, 78, 0.4);
+
+            --gold: #f2c14e;
+            --gold-deep: #d19a1f;
+            --gold-glow: rgba(242, 193, 78, 0.55);
+
+            --azure: #7dd3fc;
+            --azure-deep: #38bdf8;
+
+            --emerald: #34d399;
+            --rose: #fb7185;
+
+            --ivory: #f7f3ea;
         }
 
         * {
@@ -30,9 +46,9 @@
             width: 100vw;
             height: 100vh;
             overflow: hidden;
-            background: #0b1120;
+            background: var(--bg-deep);
             font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #ffffff;
+            color: var(--ivory);
         }
 
         .presentation-viewport {
@@ -43,6 +59,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden;
+        }
+
+        /* leve textura de "céu estrelado" para dar profundidade */
+        .presentation-viewport::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(1.5px 1.5px at 10% 20%, rgba(255,255,255,0.35), transparent),
+                radial-gradient(1.5px 1.5px at 80% 15%, rgba(255,255,255,0.25), transparent),
+                radial-gradient(1px 1px at 30% 70%, rgba(255,255,255,0.3), transparent),
+                radial-gradient(1.5px 1.5px at 60% 85%, rgba(255,255,255,0.2), transparent),
+                radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,0.3), transparent),
+                radial-gradient(1.5px 1.5px at 45% 35%, rgba(255,255,255,0.2), transparent);
+            background-size: 100% 100%;
+            opacity: 0.6;
+            z-index: 0;
         }
 
         .slide {
@@ -60,6 +95,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            z-index: 1;
         }
 
         .slide.active {
@@ -70,19 +106,32 @@
         }
 
         .glass-card {
+            position: relative;
             background: var(--card-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 2px solid var(--card-border);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1.5px solid var(--card-border);
             border-radius: 24px;
             padding: 3rem;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.03) inset;
             width: 100%;
             max-width: 1400px;
             max-height: 84vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            overflow: hidden;
+        }
+
+        /* barra de destaque dourada no topo do card */
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold-deep), var(--gold), var(--azure));
         }
 
         h1, h2, .mandamento-num {
@@ -98,15 +147,20 @@
             font-size: 1.45rem;
             line-height: 1.6;
             font-weight: 500;
+            color: rgba(247, 243, 234, 0.92);
         }
 
         .text-gold {
-            color: var(--gold);
-            text-shadow: 0 0 15px var(--gold-glow);
+            background: linear-gradient(90deg, var(--gold-deep), var(--gold) 50%, #ffe08a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 25px var(--gold-glow);
         }
 
         .text-cyan {
-            color: var(--cyan);
+            color: var(--azure);
+            text-shadow: 0 0 12px rgba(125, 211, 252, 0.35);
         }
 
         .passagem-biblica {
@@ -114,11 +168,12 @@
             border-left: 5px solid var(--gold);
             padding: 12px 20px;
             margin: 20px 0;
-            background: rgba(250, 204, 21, 0.12);
+            background: linear-gradient(90deg, rgba(242, 193, 78, 0.14), rgba(242, 193, 78, 0.03));
             border-radius: 0 12px 12px 0;
             font-size: 1.35rem;
             font-weight: 600;
             line-height: 1.5;
+            color: #ffe9b3;
         }
 
         .slide-img {
@@ -126,8 +181,8 @@
             width: 100%;
             object-fit: contain;
             border-radius: 16px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.6);
-            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.65), 0 0 0 1px rgba(242,193,78,0.15);
+            border: 2px solid rgba(242, 193, 78, 0.25);
         }
 
         video {
@@ -135,7 +190,7 @@
             width: 100%;
             max-width: 1000px;
             border-radius: 18px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.75);
             border: 3px solid var(--gold);
         }
 
@@ -154,6 +209,19 @@
             font-size: 1.2rem;
             font-weight: 800;
             letter-spacing: 2px;
+            color: var(--ivory);
+            text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+        }
+
+        .btn-outline-light {
+            border-color: rgba(242, 193, 78, 0.55) !important;
+            color: var(--ivory) !important;
+            background: rgba(20, 16, 48, 0.5);
+        }
+        .btn-outline-light:hover {
+            background: var(--gold) !important;
+            border-color: var(--gold) !important;
+            color: #1a1240 !important;
         }
 
         .bottom-controls {
@@ -165,10 +233,25 @@
             align-items: center;
             gap: 20px;
             z-index: 10;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(7, 9, 18, 0.8);
             padding: 10px 25px;
             border-radius: 40px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(242, 193, 78, 0.25);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .bottom-controls .btn-dark {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(242, 193, 78, 0.3);
+            color: var(--gold);
+        }
+        .bottom-controls .btn-dark:hover {
+            background: var(--gold);
+            color: #1a1240;
+        }
+
+        #slide-counter {
+            color: var(--ivory);
         }
 
         .progress-bar-container {
@@ -177,38 +260,74 @@
             left: 0;
             width: 100%;
             height: 6px;
-            background: rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.12);
             z-index: 10;
         }
 
         .progress-bar-fill {
             height: 100%;
-            background: var(--gold);
+            background: linear-gradient(90deg, var(--gold-deep), var(--gold), var(--azure));
             width: 0%;
             transition: width 0.3s ease;
+            box-shadow: 0 0 10px var(--gold-glow);
         }
 
+        /* --- Quiz --- */
         .quiz-option-btn {
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.25);
-            color: white;
+            background: rgba(255,255,255,0.06);
+            border: 2px solid rgba(255,255,255,0.16);
+            color: var(--ivory);
             text-align: left;
-            padding: 16px 24px;
+            padding: 14px 22px;
             border-radius: 14px;
             transition: all 0.2s;
-            font-size: 1.3rem;
+            font-size: 1.25rem;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
         }
 
         .quiz-option-btn:hover {
-            background: rgba(255,255,255,0.25);
+            background: rgba(242, 193, 78, 0.14);
             color: var(--gold);
             border-color: var(--gold);
+            transform: translateX(4px);
+        }
+
+        .opt-badge {
+            flex: 0 0 auto;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(242, 193, 78, 0.15);
+            border: 1.5px solid rgba(242, 193, 78, 0.4);
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            color: var(--gold);
+            font-size: 1rem;
+        }
+
+        .opt-text {
+            flex: 1 1 auto;
         }
 
         .quiz-q-title {
             font-size: 1.6rem;
             font-weight: 700;
+            color: var(--ivory);
+        }
+
+        .quiz-question-box .passagem-biblica-like {
+            color: var(--azure);
+        }
+
+        #q-feedback-0, [id^="q-feedback-"] {
+            letter-spacing: 0.5px;
         }
 
         @media (max-height: 800px) {
@@ -218,14 +337,14 @@
             .slide-text { font-size: 1.25rem; }
             .passagem-biblica { font-size: 1.15rem; }
             .slide-img { max-height: 42vh; }
-            .quiz-option-btn { font-size: 1.1rem; padding: 12px 18px; }
+            .quiz-option-btn { font-size: 1.05rem; padding: 12px 16px; }
         }
     </style>
 </head>
 <body>
 
     <div class="presentation-viewport">
-        
+
         <div class="top-bar">
             <span class="top-title text-uppercase opacity-90">
                 🇻🇦 Os 10 Mandamentos da Igreja Católica
@@ -344,18 +463,18 @@
                         q: 'Uma pessoa diz que consulta o horóscopo só por curiosidade. Qual é o problema real dessa atitude perante o 1º Mandamento se ela passa a tomar decisões com base nisso?',
                         opts: [
                             'Não há erro, desde que ela não pague por essa consulta.',
+                            'O problema é apenas de ordem prática, pois ela perde tempo com algo sem fundamento científico.',
                             'Ela passa a depositar a confiança do seu futuro nos astros e não em Deus.',
-                            'O único erro é perder tempo lendo sobre isso pela manhã.',
                             'A Igreja proíbe apenas o estudo científico das estrelas.'
                         ],
-                        ans: 1
+                        ans: 2
                     },
                     {
                         q: 'Um jovem faz uma promessa usando o nome de Deus para passar em uma prova sem ter estudado nada. Por que isso fere o 2º Mandamento?',
                         opts: [
                             'Porque ele deveria ter feito a promessa em um local religioso.',
                             'Porque usou o nome sagrado de Deus como barganha para cobrir a sua falta de responsabilidade.',
-                            'Não fere o mandamento, pois ele tinha boa intenção ao querer passar.',
+                            'Porque prometeu algo sem ter certeza se conseguiria cumprir, o que é sempre pecado.',
                             'Fere o mandamento apenas se a promessa tiver sido feita em voz alta.'
                         ],
                         ans: 1
@@ -364,11 +483,11 @@
                         q: 'Quando a busca por curtidas, aprovação na internet e fama passa a orientar todas as escolhas de uma pessoa, o que está acontecendo?',
                         opts: [
                             'Ela está apenas se adaptando ao mundo moderno de forma natural.',
+                            'Ela está cometendo um pecado de vaidade, que é diferente da idolatria condenada no mandamento.',
                             'Ela transformou a aprovação alheia em um "falso deus", colocando-a acima dos valores morais.',
-                            'Ela está cumprindo o mandamento de se comunicar bem.',
                             'Isso só se torna um problema se ela usar palavras agressivas na rede.'
                         ],
-                        ans: 1
+                        ans: 2
                     }
                 ]
             },
@@ -449,32 +568,32 @@
                     {
                         q: 'Se uma pessoa decide usar todo o domingo para adiantar tarefas e compras, sem dedicar tempo à oração, à missa ou à família, qual é a falha perante o 3º Mandamento?',
                         opts: [
-                            'O único erro é o cansaço físico do dia seguinte.',
-                            'Ela trata o domingo como um dia comum de produção, esquecendo que o tempo também pertence a Deus.',
                             'Não há erro, desde que ela faça uma oração rápida antes de dormir.',
+                            'O problema é apenas ela não ter descansado fisicamente o suficiente.',
+                            'Ela trata o domingo como um dia comum de produção, esquecendo que o tempo também pertence a Deus.',
                             'A falha só existe se ela obrigar outras pessoas a trabalharem com ela.'
                         ],
-                        ans: 1
+                        ans: 2
                     },
                     {
                         q: 'Um filho adulto discorda fortemente das opiniões dos seus pais idosos. O que o 4º Mandamento orienta sobre essa convivência?',
                         opts: [
                             'Ele tem o direito de afastar-se e ignorá-los por completo.',
                             'Pode discordar de ideias, mas mantém o dever de respeito, cuidado e amparo aos pais.',
-                            'A obrigação de respeitar os pais termina no momento em que o filho atinge a maioridade.',
-                            'Ele deve concordar obrigatoriamente com tudo para não pecar.'
+                            'Deve sempre ceder às opiniões dos pais para evitar desrespeito, mesmo discordando profundamente.',
+                            'A obrigação de respeitar os pais termina no momento em que o filho atinge a maioridade.'
                         ],
                         ans: 1
                     },
                     {
                         q: 'Por que o deboche ou o desrespeito deliberado aos professores dentro de sala de aula fere o 4º Mandamento?',
                         opts: [
-                            'Porque o mandamento se estende ao respeito às autoridades legítimas que trabalham pela nossa formação.',
                             'Porque os professores possuem grau de parentesco indireto com os alunos.',
-                            'Fere o mandamento apenas se a escola for estritamente religiosa.',
-                            'Não fere o mandamento, pois este se limita aos pais biológicos.'
+                            'Porque o mandamento se estende ao respeito às autoridades legítimas que trabalham pela nossa formação.',
+                            'Porque os professores atuam como representantes diretos dos pais dentro da escola, substituindo-os totalmente.',
+                            'Fere o mandamento apenas se a escola for estritamente religiosa.'
                         ],
-                        ans: 0
+                        ans: 1
                     }
                 ]
             },
@@ -556,31 +675,31 @@
                         q: 'Por que o ato de postar mensagens de ódio ou desejar abertamente o mal de alguém na internet fere o 5º Mandamento ("Não matar")?',
                         opts: [
                             'Não fere esse mandamento, pois mensagens virtuais não provocam danos físicos.',
+                            'Fere apenas o mandamento que fala sobre falso testemunho, pois se trata de discurso e não de violência física.',
                             'Porque o mandamento condena não só a morte física, mas a agressão moral e o cultivo da raiva no coração.',
-                            'Fere apenas o mandamento sobre dizer a verdade.',
                             'Só se torna pecado se a pessoa atacada descobrir quem enviou a mensagem.'
                         ],
-                        ans: 1
+                        ans: 2
                     },
                     {
                         q: 'Duas pessoas estão em um relacionamento no qual uma usa a outra apenas para obter vantagens pessoais ou prazer temporário. O que o 6º Mandamento aponta nessa conduta?',
                         opts: [
                             'É uma situação aceitável, desde que ambas concordem com o arranjo.',
                             'É um erro grave, pois reduz a pessoa humana a um simples objeto de uso.',
-                            'O único problema é a falta de um contrato formal entre as partes.',
-                            'Não envolve o mandamento se ambas forem maiores de idade.'
+                            'É errado apenas se uma das partes descobrir e se sentir traída pelo outro.',
+                            'O único problema é a falta de um contrato formal entre as partes.'
                         ],
                         ans: 1
                     },
                     {
                         q: 'Qual é a diferença entre o cuidado saudável com o corpo e a obsessão pela vaidade física sob a ótica cristã?',
                         opts: [
-                            'O cuidado preserva o templo do Espírito Santo; a obsessão transforma o corpo em um objeto de culto e exibição.',
                             'Qualquer tipo de cuidado com a aparência é considerado vaidade excessiva.',
-                            'Não existe diferença prática para a moral religiosa.',
+                            'A diferença está apenas na quantidade de tempo dedicada aos cuidados diários com a aparência.',
+                            'O cuidado preserva o templo do Espírito Santo; a obsessão transforma o corpo em um objeto de culto e exibição.',
                             'A obsessão só é ruim se trouxer prejuízo financeiro direto.'
                         ],
-                        ans: 0
+                        ans: 2
                     }
                 ]
             },
@@ -664,7 +783,7 @@
                         opts: [
                             'Ele pode ficar com o bem, desde que doe uma quantia para a igreja.',
                             'Ele é obrigado a devolver ao dono, pois reter o que pertence a outro sabendo a quem pertence é uma forma de furto.',
-                            'Sua única obrigação é avisar à direção sem entregar o objeto.',
+                            'Ele pode ficar com o objeto até que o verdadeiro dono o procure e reclame oficialmente.',
                             'Ele só precisaria devolver se tivesse retirado o objeto de dentro da mochila do colega.'
                         ],
                         ans: 1
@@ -674,8 +793,8 @@
                         opts: [
                             'Nenhuma, pois a culpa é integralmente de quem criou a informação.',
                             'Mancha a reputação do próximo com difamação, propagando uma inverdade.',
-                            'Trata-se apenas de uma distração sem impacto moral.',
-                            'Só se tornaria errado se houvesse cobrança financeira para enviar a mensagem.'
+                            'Só é errado se o boato for sobre um assunto grave, pois fofocas leves não causam dano real.',
+                            'Trata-se apenas de uma distração sem impacto moral.'
                         ],
                         ans: 1
                     },
@@ -684,8 +803,8 @@
                         opts: [
                             'Fazer uma promessa silenciosa de não cometer mais fraudes.',
                             'Restituir o valor do prejuízo causado além de pedir perdão.',
-                            'Mudar de trabalho para não reencontrar a pessoa lesada.',
-                            'A oração individual substitui totalmente a necessidade de devolução.'
+                            'Pedir perdão sinceramente já é suficiente, pois a intenção interior é o que mais importa diante de Deus.',
+                            'Mudar de trabalho para não reencontrar a pessoa lesada.'
                         ],
                         ans: 1
                     }
@@ -754,8 +873,8 @@
                         opts: [
                             'A admiração alegra-se com a conquista alheia; a inveja entristece-se com o bem do outro e deseja que ele perca o que conseguiu.',
                             'Não há diferença real entre admiração e inveja.',
-                            'A inveja só existe quando tentamos roubar diretamente o bem da pessoa.',
-                            'A admiração é um sentimento incorreto para o cristão.'
+                            'A diferença está apenas na intensidade do sentimento, sendo a inveja uma admiração mais forte e exagerada.',
+                            'A inveja só existe quando tentamos roubar diretamente o bem da pessoa.'
                         ],
                         ans: 0
                     },
@@ -764,8 +883,8 @@
                         opts: [
                             'Apenas no cumprimento das obrigações civis perante o governo.',
                             'Nas intenções secretas, desejos do coração e pensamentos antes mesmo que virem ações.',
-                            'Exclusivamente nas regras da vida religiosa do templo.',
-                            'Nas punições legais que ocorrem durante o julgamento humano.'
+                            'Nas consequências sociais que os maus pensamentos podem gerar quando são descobertos publicamente.',
+                            'Exclusivamente nas regras da vida religiosa do templo.'
                         ],
                         ans: 1
                     },
@@ -774,7 +893,7 @@
                         opts: [
                             'Trabalhando exaustivamente para comprar itens melhores do que os dos amigos.',
                             'Praticando a gratidão pelo que já possui e focando nas virtudes espirituais que não se compram.',
-                            'Bloqueando todos os colegas sem mudar sua postura interior.',
+                            'Comparando-se com pessoas em situação pior, para sentir-se melhor consigo mesma.',
                             'Evitando qualquer tipo de aquisição de bens no comércio.'
                         ],
                         ans: 1
@@ -792,7 +911,7 @@
                         opts: [
                             'Porque cumprir deveres sociais não substitui o mandamento principal de amar a Deus sobre todas as coisas.',
                             'Não falha em nada; fazer o bem ao próximo é o único dever cristão existente.',
-                            'Falha somente porque ele precisa contribuir financeiramente com a comunidade.',
+                            'Porque ele também deveria seguir rigorosamente todos os rituais litúrgicos da Igreja, além dos mandamentos sociais.',
                             'Falha porque a única obrigação do cristão é ler livros religiosos diariamente.'
                         ],
                         ans: 0
@@ -801,9 +920,9 @@
                         q: '2. Por que a Igreja afirma que santificar o Domingo (3º Mandamento) vai além de simplesmente não trabalhar?',
                         opts: [
                             'Porque exige dedicar esse tempo ao culto a Deus na Missa, ao descanso mental e à convivência familiar.',
+                            'Porque exige também evitar qualquer forma de lazer ou entretenimento, dedicando o dia inteiro à oração silenciosa.',
                             'Porque o descanso só tem validade se for acompanhado de jejum rigoroso.',
-                            'Porque o trabalho não realizado no domingo deve ser obrigatoriamente feito no sábado.',
-                            'Porque é proibido praticar qualquer tipo de lazer durante o fim de semana.'
+                            'Porque o trabalho não realizado no domingo deve ser obrigatoriamente feito no sábado.'
                         ],
                         ans: 0
                     },
@@ -812,7 +931,7 @@
                         opts: [
                             'Omitir fatos para se proteger é uma atitude prudente e permitida.',
                             'Trata-se de uma falta contra a verdade e a justiça, pois a coerência exige assumir os próprios erros.',
-                            'Não há falta moral se ele não fizer um depoimento juramentado perante um juiz.',
+                            'Trata-se de uma falta leve, pois ele não afirmou uma mentira diretamente, apenas ficou em silêncio.',
                             'A responsabilidade é de quem não se defendeu na ocasião.'
                         ],
                         ans: 1
@@ -821,19 +940,19 @@
                         q: '4. Se alguém estraga um objeto de um colega por imprudência ou irresponsabilidade, o que o 7º Mandamento determina?',
                         opts: [
                             'Exige a reparação do dano ou a substituição do objeto estragado além do pedido de desculpas.',
-                            'Apenas um pedido formal de desculpas encerra completamente a questão moral.',
+                            'Exige apenas o pedido sincero de desculpas, já que não houve intenção de causar o dano.',
                             'O colega lesado deve arcar com o prejuízo para aprender a cuidar melhor das suas coisas.',
                             'A oração de arrependimento elimina a necessidade de ressarcir o valor.'
                         ],
                         ans: 0
                     },
                     {
-                        q: '5. Por que Jesus enfatizou o cuidado com os pensamentos e intenções ao explicar os mandamentos do "Não Matar" e "Não Peque contra a Castidade"?',
+                        q: '5. Por que Jesus enfatizou o cuidado com os pensamentos e intenções ao explicar os mandamentos do "Não Matar" e "Não Pecar contra a Castidade"?',
                         opts: [
                             'Porque as ações erradas nascem primeiro nas intenções do coração e na mente.',
+                            'Porque a Igreja considera os pensamentos ruins pecados mais graves do que as próprias ações.',
                             'Porque os pensamentos podem ser descobertos por outras pessoas facilmente.',
-                            'Porque o julgamento civil condena pensamentos com as mesmas penas das ações.',
-                            'Trata-se apenas de um conselho sem ligação com a gravidade dos Mandamentos.'
+                            'Porque o julgamento civil condena pensamentos com as mesmas penas das ações.'
                         ],
                         ans: 0
                     },
@@ -841,7 +960,7 @@
                         q: '6. Qual é a relação inseparável apresentada por Jesus ao resumir toda a Lei dos 10 Mandamentos?',
                         opts: [
                             'O amor a Deus e o amor ao próximo caminham juntos; não é possível amar a Deus e desrespeitar os irmãos.',
-                            'O amor a Deus anula a necessidade de respeitar as leis da sociedade.',
+                            'O amor a Deus deve vir sempre em primeiro lugar, podendo o amor ao próximo ser deixado de lado em momentos de maior dedicação espiritual.',
                             'O amor ao próximo só é exigido daqueles que exercem liderança comunitária.',
                             'Os 10 Mandamentos foram cancelados e substituídos por acordos sociais simples.'
                         ],
@@ -858,7 +977,7 @@
 
         function renderSlides() {
             slidesContainer.innerHTML = '';
-            
+
             slidesData.forEach((data, index) => {
                 const slideDiv = document.createElement('div');
                 slideDiv.className = `slide ${index === 0 ? 'active' : ''}`;
@@ -867,7 +986,7 @@
                 if (data.type === 'cover') {
                     slideDiv.innerHTML = `
                         <div class="glass-card text-center align-items-center">
-                            <span class="badge bg-warning text-dark fs-5 px-4 py-2 rounded-pill mb-4 fw-bold">CATECISMO DA IGREJA CATÓLICA</span>
+                            <span class="badge fs-5 px-4 py-2 rounded-pill mb-4 fw-bold" style="background: linear-gradient(90deg, var(--gold-deep), var(--gold)); color:#1a1240;">CATECISMO DA IGREJA CATÓLICA</span>
                             <h1 class="display-3 text-gold mb-3">${data.title}</h1>
                             <p class="fs-2 text-cyan mb-4 fw-bold">${data.subtitle}</p>
                             <img src="${data.img}" alt="Capa" class="slide-img mb-4" onerror="this.style.display='none'">
@@ -890,7 +1009,7 @@
                         <div class="glass-card">
                             <div class="row align-items-center h-100">
                                 <div class="col-md-7 pe-md-5">
-                                    <span class="badge bg-primary mb-3 fs-5 fw-bold px-3 py-2">${data.num}</span>
+                                    <span class="badge mb-3 fs-5 fw-bold px-3 py-2" style="background: linear-gradient(90deg, #3a2a7a, #1a1240); color: var(--azure); border: 1px solid rgba(125,211,252,0.35);">${data.num}</span>
                                     <h2 class="text-gold mb-3">${data.title}</h2>
                                     <div class="passagem-biblica">${data.passage}</div>
                                     <p class="slide-text mt-4">${data.text}</p>
@@ -915,7 +1034,7 @@
             return `
                 <div class="glass-card" id="quiz-card-${slideIdx}">
                     <div class="text-center mb-4">
-                        <span class="badge bg-warning text-dark fs-5 px-4 py-2 mb-2 fw-bold">ENCONTRO CATÓLICO</span>
+                        <span class="badge fs-5 px-4 py-2 mb-2 fw-bold" style="background: linear-gradient(90deg, var(--gold-deep), var(--gold)); color:#1a1240;">ENCONTRO CATÓLICO</span>
                         <h2 class="text-gold">${quizData.title}</h2>
                     </div>
                     <div id="quiz-body-${slideIdx}">
@@ -925,7 +1044,7 @@
                         </div>
                         <div id="q-feedback-${slideIdx}" class="mt-4 text-center fw-bold fs-3"></div>
                         <div class="text-end mt-3">
-                            <button class="btn btn-warning btn-lg px-5 fw-bold text-dark fs-4" id="q-next-btn-${slideIdx}" style="display:none;" onclick="nextQuizQuestion(${slideIdx})">Próxima Pergunta ▶</button>
+                            <button class="btn btn-lg px-5 fw-bold fs-4" style="background: linear-gradient(90deg, var(--gold-deep), var(--gold)); color:#1a1240; border:none; border-radius: 999px;" id="q-next-btn-${slideIdx}" style="display:none;" onclick="nextQuizQuestion(${slideIdx})">Próxima Pergunta ▶</button>
                         </div>
                     </div>
                 </div>
@@ -959,7 +1078,7 @@
             q.opts.forEach((opt, idx) => {
                 const btn = document.createElement('button');
                 btn.className = 'quiz-option-btn';
-                btn.innerText = `${String.fromCharCode(65 + idx)}) ${opt}`;
+                btn.innerHTML = `<span class="opt-badge">${String.fromCharCode(65 + idx)}</span><span class="opt-text">${opt}</span>`;
                 btn.onclick = () => checkQuizAnswer(slideIdx, idx, btn);
                 optionsContainer.appendChild(btn);
             });
@@ -974,18 +1093,18 @@
             const allBtns = document.querySelectorAll(`#q-options-${slideIdx} button`);
 
             if (selectedIdx === q.ans) {
-                btn.style.background = 'rgba(46, 204, 113, 0.45)';
-                btn.style.borderColor = '#2ecc71';
+                btn.style.background = 'rgba(52, 211, 153, 0.35)';
+                btn.style.borderColor = '#34d399';
                 document.getElementById(`q-feedback-${slideIdx}`).innerText = '✅ Resposta Correta!';
-                document.getElementById(`q-feedback-${slideIdx}`).style.color = '#2ecc71';
+                document.getElementById(`q-feedback-${slideIdx}`).style.color = '#34d399';
                 state.score++;
             } else {
-                btn.style.background = 'rgba(231, 76, 60, 0.45)';
-                btn.style.borderColor = '#e74c3c';
-                allBtns[q.ans].style.background = 'rgba(46, 204, 113, 0.45)';
-                allBtns[q.ans].style.borderColor = '#2ecc71';
+                btn.style.background = 'rgba(251, 113, 133, 0.35)';
+                btn.style.borderColor = '#fb7185';
+                allBtns[q.ans].style.background = 'rgba(52, 211, 153, 0.35)';
+                allBtns[q.ans].style.borderColor = '#34d399';
                 document.getElementById(`q-feedback-${slideIdx}`).innerText = '❌ Resposta Incorreta.';
-                document.getElementById(`q-feedback-${slideIdx}`).style.color = '#e74c3c';
+                document.getElementById(`q-feedback-${slideIdx}`).style.color = '#fb7185';
             }
 
             document.getElementById(`q-next-btn-${slideIdx}`).style.display = 'inline-block';
@@ -994,7 +1113,7 @@
         function nextQuizQuestion(slideIdx) {
             const state = quizStates[slideIdx];
             const data = slidesData[slideIdx];
-            
+
             state.currentQ++;
             if (state.currentQ < data.questions.length) {
                 renderQuizQuestion(slideIdx);
@@ -1005,7 +1124,7 @@
                         <h2 class="text-gold mb-3 display-4">Quiz Concluído! 🎉</h2>
                         <p class="fs-2 mb-4">Você acertou <strong class="text-cyan fs-1">${state.score}</strong> de <strong>${data.questions.length}</strong> perguntas.</p>
                         <p class="fs-4 lead">${state.score === data.questions.length ? 'Excelente! Conhecimento muito bom da fé e dos Mandamentos!' : 'Muito bem! Continue participando e aprendendo mais a cada dia.'}</p>
-                        <button class="btn btn-outline-light btn-lg mt-4 px-5 fs-4" onclick="initQuiz(${slideIdx})">Reiniciar Quiz 🔄</button>
+                        <button class="btn btn-lg mt-4 px-5 fs-4" style="background: transparent; border: 2px solid var(--gold); color: var(--gold); border-radius: 999px;" onclick="initQuiz(${slideIdx})">Reiniciar Quiz 🔄</button>
                     </div>
                 `;
             }
